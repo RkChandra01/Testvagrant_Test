@@ -1,1 +1,55 @@
-/
+//Name-Ravi Kumar Chandra
+//College-Bangalore Institute of technology
+//Phone Number-7050489532
+//Email-rav73124@gmail.com
+
+//code
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+class Product {
+public:
+  std::string productName;
+  double productUnitPrice;
+  double productGstRate;
+  int productQuantity;
+
+  Product(std::string name, double price, double gst, int qty)
+      : productName(std::move(name)), productUnitPrice(price), productGstRate(gst), productQuantity(qty) {}
+
+  double calculateTotalPrice() const {
+    return (productUnitPrice + (productUnitPrice * productGstRate / 100)) * productQuantity;
+  }
+};
+
+int main() {
+  // Basket
+  Product productLeather("Leather", 1100, 18, 1);
+  Product productUmbrella("Umbrella", 900, 12, 4);
+  Product productCigarette("Cigarette", 200, 28, 3);
+  Product productHoney("Honey", 100, 0, 2);
+
+  std::vector<Product> productBasket = {productLeather, productUmbrella, productCigarette, productHoney};
+
+  // Identify product with maximum GST amount
+  auto productWithMaxGst = std::max_element(productBasket.begin(), productBasket.end(),
+                                            [](const Product &product1, const Product &product2) {
+                                              return (product1.productUnitPrice * product1.productGstRate / 100) <
+                                                     (product2.productUnitPrice * product2.productGstRate / 100);
+                                            });
+
+  std::cout << "Product with maximum GST amount: " << productWithMaxGst->productName << std::endl;
+
+  // Calculate total amount to be paid
+  double totalAmountToPay = 0;
+  for (const auto &product : productBasket) {
+    totalAmountToPay += product.calculateTotalPrice();
+  }
+
+  std::cout << "Total amount to be paid: Rs. " << totalAmountToPay << std::endl;
+
+  return 0;
+}
+
